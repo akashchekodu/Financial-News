@@ -1,0 +1,12 @@
+# Virtual environment
+env/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Scrapyd generated files
+.scrapy/
+*.log
