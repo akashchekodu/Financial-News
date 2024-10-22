@@ -8,7 +8,7 @@ class PulseNewsSpider(scrapy.Spider):
 
     custom_settings = {
         'FEEDS' : {
-            'newsdata.json' : {'format' : 'json', 'overwrite' : False}
+            'newsdata.json' : {'format' : 'json', 'overwrite' : True}
         }
     }
 
@@ -38,7 +38,7 @@ class PulseNewsSpider(scrapy.Spider):
             item['link'] = response.urljoin(link) if link else None
 
             # Extract date, assign None if missing
-            date = element.css('span.date::text').get()
+            date = element.css('span.date::attr(title)').get()
             item['date'] = date.strip() if date else None
 
             # Extract description, assign None if missing

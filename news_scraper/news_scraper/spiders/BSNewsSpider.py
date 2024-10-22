@@ -12,7 +12,7 @@ class BSNewsSpider(scrapy.Spider):
 
     custom_settings = {
         'FEEDS': {
-            'bsnewsdata.json': {'format': 'json', 'overwrite': False}
+            'bsnewsdata.json': {'format': 'json', 'overwrite': True}
         }
     }
 
@@ -31,12 +31,25 @@ class BSNewsSpider(scrapy.Spider):
             link = element.css('a.smallcard-title::attr(href)').get()
             item['link'] = response.urljoin(link) if link else None
 
-            # Extract date (adjust selector as needed)
-            date = element.css('span.datetime::text').get()
-            item['date'] = date.strip() if date else None
+
+            # Extract full date and time using XPath
+            date_text = element.xpath('string(.//span[@class="listingstyle_updtText__lnZb7"])').get()
+            if date_text:
+                # Clean up the text by removing 'Updated On :' and trimming spaces
+                cleaned_date = date_text.replace('Updated On :', '').strip()
+
+                # Further clean to extract only the date and time part (stop at 'IST')
+                cleaned_date = cleaned_date.split('IST')[0].strip() + ' IST'
+
+                item['date'] = cleaned_date
+            else:
+                item['date'] = None
+
+
+
 
             # Extract description (adjust selector as needed)
-            description = element.css('div.article-body p::text').getall()
+            description = element.css('div.listingstyle_image_title__TE0P3 p::text').getall()
             item['description'] = ' '.join(description).strip() if description else None
 
             # Extract source
