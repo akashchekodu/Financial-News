@@ -12,7 +12,7 @@ class MCNewsSpider(scrapy.Spider):
 
     custom_settings = {
         'FEEDS': {
-            'mcnewsdata.json': {'format': 'json', 'overwrite': False}
+            'mcnewsdata.json': {'format': 'json', 'overwrite': True}
         }
     }
 
