@@ -1,11 +1,11 @@
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from supabase import create_client, Client
 from itemadapter import ItemAdapter
 from datetime import datetime, timedelta
 
 # Load environment variables from .env file
-load_dotenv()
+# load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASEURL")
 SUPABASE_KEY = os.getenv("SUPABASEKEY")
