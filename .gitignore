@@ -7,6 +7,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+build/
+project.egg-info/
+
 # Scrapyd generated files
 .scrapy/
 *.log
