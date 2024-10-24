@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # Import CORS
 import psycopg2
 import os
 from dotenv import load_dotenv
@@ -8,6 +9,9 @@ load_dotenv()
 DB_CONNECTION_STRING = os.getenv("DB_CONNECTION_STRING")
 
 app = Flask(__name__)
+
+# Enable CORS for all routes
+CORS(app)  # Allow all origins by default
 
 # Database connection
 def get_db_connection():
@@ -24,22 +28,21 @@ def get_news():
     
     # Use a SQL query to filter results based on the search query
     if search_query:
-        cursor.execute("""
-    SELECT title, link, date, description, source 
-    FROM news 
-    WHERE title ~* %s
-    ORDER BY date DESC;
-""", (f'\\y{search_query}\\y',))  # \\y denotes word boundaries
+        cursor.execute(""" 
+        SELECT title, link, date, description, source 
+        FROM news 
+        WHERE title ~* %s
+        ORDER BY created_at DESC;
+        """, (f'\\y{search_query}\\y',))  # \\y denotes word boundaries
 
     else:
-        cursor.execute("SELECT title, link, date, description, source FROM news ORDER BY date DESC;")
+        cursor.execute("SELECT title, link, date, description, source FROM news ORDER BY created_at DESC;")
         
     news_items = cursor.fetchall()
     
     cursor.close()
     connection.close()
     
-    # Format data into JSON
     # Format data into JSON
     news_list = []
     for item in news_items:

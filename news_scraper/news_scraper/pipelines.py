@@ -47,8 +47,10 @@ class NewsScraperPipeline:
         try:
             # Perform the deletion
             self.cursor.execute("""
-                DELETE FROM news WHERE date < %s
-            """, (one_day_ago,))
+                DELETE FROM news 
+                WHERE date < %s OR created_at < %s
+            """, (one_day_ago, one_day_ago))
+
             self.connection.commit()
             spider.logger.info("Old news deleted successfully")
         except Exception as e:
